@@ -28,3 +28,12 @@
 
 > Deployment (?)
     * Cloudfare 
+
+
+> Roadmap:
+    1. .proto
+    2. broker
+    3. sub and db
+    4. pub
+    5. frontend
+    6. nginx & deploy
