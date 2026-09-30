@@ -24,3 +24,7 @@
 
     *Persistent (On-Disk) - PostgreSQL (SQLi), 
                             MariaDB (XSS)
+
+
+> Deployment (?)
+    * Cloudfare 
