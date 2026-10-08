@@ -2,7 +2,6 @@ package org.example.service;
 
 import com.lab2.incident.proto.*;
 import io.grpc.stub.StreamObserver;
-import org.example.service.interfaces.ServerService;
 import org.example.service.models.enums.ResponseStatusEnum;
 import org.example.service.models.enums.VulnerabilityEnum;
 import org.example.service.models.mappers.IncidentMapper;
@@ -21,21 +20,35 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+    Core handling for broker operations.
+    We're using IDL via proto to call broker with maximum abstraction.
 
+    SubscribeRequest -> proto
+    SubscribeRequestDto -> business logic
 
-public class ServerServiceImpl extends IncidentBrokerGrpc.IncidentBrokerImplBase implements ServerService {
+    That's to make diff from proto structure to dto
+ */
+
+public class ServerServiceImpl extends IncidentBrokerGrpc.IncidentBrokerImplBase {
     private static final Logger logger = LoggerFactory.getLogger(ServerServiceImpl.class);
 
+    // Using Thread-safe collection
     private final Map<VulnerabilityEnum, Set<StreamObserver<IncidentResponse>>> subscribers = new ConcurrentHashMap<>();
 
     public ServerServiceImpl() {
         for (VulnerabilityEnum type : VulnerabilityEnum.values()) {
             if (type != VulnerabilityEnum.UNKNOWN) {
                 subscribers.put(type, ConcurrentHashMap.newKeySet());
+                logger.info("[INFO | ServerServiceImpl] Put in map: {} {}", type, ConcurrentHashMap.newKeySet());
             }
         }
     }
 
+    /**
+        This method takes IncidentRequest and transmitting to all subs that are listening specific topic.
+        Also, we're returning message to pub if transmitting data was successful.
+    */
     @Override
     public void publishIncident(IncidentRequest grpcRequest, StreamObserver<PublishResponse> responseObserver) {
         // mapping from PROTO to DTO
@@ -73,6 +86,9 @@ public class ServerServiceImpl extends IncidentBrokerGrpc.IncidentBrokerImplBase
         responseObserver.onCompleted();
     }
 
+    /**
+        Method do add subs in our map
+    */
     @Override
     public void subscribeToIncidents(SubscribeRequest request, StreamObserver<IncidentResponse> responseObserver) {
         SubscribeRequestDto dtoRequest = SubscribeMapper.INSTANCE.toDto(request);
@@ -101,7 +117,9 @@ public class ServerServiceImpl extends IncidentBrokerGrpc.IncidentBrokerImplBase
         }
     }
 
-    // Multicasting incident to subs
+    /**
+        Transmitting multicast (to specific group of subs) incidents
+     */
     private void multicastToSubscribers(IncidentResponse grpcEvent, VulnerabilityEnum type) {
         Set<StreamObserver<IncidentResponse>> topicSubscribers = subscribers.get(type);
 
@@ -118,5 +136,9 @@ public class ServerServiceImpl extends IncidentBrokerGrpc.IncidentBrokerImplBase
                 topicSubscribers.remove(subscriberStream);
             }
         }
+    }
+
+    public Map<VulnerabilityEnum, Set<StreamObserver<IncidentResponse>>> getMap(){
+        return this.subscribers;
     }
 }
