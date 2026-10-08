@@ -1,0 +1,18 @@
+services:
+  broker:
+    build: ./broker 
+    container_name: broker 
+    ports: 
+      - "8080:8080"
+    networks:
+      - infra-net
+      
+  # PostgreSQL
+  # MariaDB
+  # Nginx
+  # Sub
+  # Pub
+
+networks:
+  infra-net: 
+    driver: bridge

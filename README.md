@@ -20,15 +20,12 @@
     > K3s: Sub, Databasese
 
 > Storage
-    *Transient (In-memory)
+    > Transient (In-memory);
 
-    *Persistent (On-Disk) - PostgreSQL (SQLi), 
-                            MariaDB (XSS)
-
+    > Persistent (On-Disk) - PostgreSQL (SQLi), MariaDB (XSS)
 
 > Deployment (?)
-    * Cloudfare 
-
+    > Cloudfare 
 
 > Roadmap:
     1. .proto
