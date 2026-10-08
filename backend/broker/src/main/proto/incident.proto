@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package incident;
+
+option go_package = "github.com/your-username/lab2/proto/gen;incidentpb";
+option java_multiple_files = true;
+option java_package = "com.lab2.incident.proto";
+
+
+// ==============
+// Broker service
+// ==============
+service IncidentBroker {
+  rpc PublishIncident (IncidentRequest) returns (PublishResponse);
+  rpc SubscribeToIncidents (SubscribeRequest) returns (stream IncidentResponse);
+}
+
+
+
+// =========
+// Publisher
+// ========= 
+
+// брокер принимае
+message IncidentRequest {
+  VulnerabilityType type = 1; 
+  string source_ip = 2;       
+  string payload = 3;         
+  string target_endpoint = 4; 
+  string message_id = 5;
+  int64 timestamp = 6;
+}
+
+// Ответ брокера на успешную публикацию
+message PublishResponse {
+  bool success = 1;
+  string message_id = 2;      
+  ResponseStatus status = 3;
+}
+
+
+// ==========
+// Subscriber
+// ==========
+
+// Запрос подписки от Subscriber (какой топик его интересует)
+message SubscribeRequest {
+  VulnerabilityType type = 1;
+}
+
+// Сообщение, которое брокер стримит подписчику
+message IncidentResponse {
+  VulnerabilityType type = 1;
+  string source_ip = 2;
+  string payload = 3;
+  string target_endpoint = 4;
+  string message_id = 5;
+  int64 timestamp = 6;
+}
+
+
+// ========
+//  Enums
+// ========
+
+enum VulnerabilityType {
+  UNKNOWN = 0;
+  SQLi = 1;
+  XSS = 2;
+}
+
+enum ResponseStatus {
+  ERROR = 0;
+  SEND_TO_BROKER = 1;
+}
