@@ -2,6 +2,9 @@ backend/broker/.idea/
 # ignore Maven build/artifacts
 /backend/broker/target/
 /backend/broker/target/**
+target/
+**/target/
+.vs/
 
 # Node modules / build
 /frontend/node_modules/
