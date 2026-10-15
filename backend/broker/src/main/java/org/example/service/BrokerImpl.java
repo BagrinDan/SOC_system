@@ -17,7 +17,7 @@ import java.io.IOException;
 
 public class BrokerImpl {
     private final static Logger logger = LoggerFactory.getLogger(BrokerImpl.class);
-    private int port = 8080;
+    private int port = 8081;
     private final Server server;
 
     public BrokerImpl(int port){

@@ -1,1 +1,20 @@
 backend/broker/.idea/
+# ignore Maven build/artifacts
+/backend/broker/target/
+/backend/broker/target/**
+
+# Node modules / build
+/frontend/node_modules/
+/frontend/dist/
+
+# Visual Studio / workspace files
+/.vs/
+/.vscode/
+/.idea/
+
+# OS files
+Thumbs.db
+.DS_Store
+
+# Python caches
+__pycache__/

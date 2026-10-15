@@ -8,8 +8,8 @@ import org.example.service.models.request.SubscribeRequestDto;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-10-07T11:29:53+0300",
-    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 21.0.12.1 (Arch Linux)"
+    date = "2026-10-15T09:00:17+0300",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 23.0.2 (Oracle Corporation)"
 )
 public class SubscribeMapperImpl implements SubscribeMapper {
 
